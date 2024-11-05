@@ -5,6 +5,7 @@ import torch
 from torch.nn import Module
 from torch.utils.data import DataLoader
 from tqdm import tqdm
+import gc
 
 from llmcompressor.pytorch.utils import tensors_module_forward, tensors_to_device
 
@@ -102,6 +103,7 @@ def run_calibration_forward(
 
         # TODO: not ideal, figure out where we aren't freeing memory instead
         # currently without this we run OOM on the 2nd forward pass
+        gc.collect()
         torch.cuda.empty_cache()
 
     return intermediates
